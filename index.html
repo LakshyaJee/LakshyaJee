@@ -3,44 +3,697 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lecture Data Generator</title>
+    <title>Al Safa Mart</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- Animate.css for Animations -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Stylesheet -->
     <style>
-        table {
-            border-collapse: collapse;
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        /* Header Styles */
+        header {
+            background-color: #ff6600;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            animation: fadeInDown 1s;
+        }
+        /* Navigation Styles */
+        nav {
+            background-color: #333;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInDown 1s;
+        }
+        nav a {
+            color: white;
+            padding: 14px 25px;
+            text-transform: uppercase;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        nav a:hover {
+            background-color: #ff6600;
+            transform: scale(1.05);
+        }
+        /* Container */
+        .container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            margin: 40px 0 20px 0;
+            font-size: 32px;
+            position: relative;
+            display: inline-block;
+        }
+        .section-title::after {
+            content: '';
+            width: 60px;
+            height: 4px;
+            background-color: #ff6600;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        /* Product Grid */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+        /* Product Card */
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+            animation: fadeInUp 1s;
+        }
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 16px rgba(0,0,0,0.2);
+        }
+        .product-card img {
             width: 100%;
+            height: 200px;
+            object-fit: cover;
         }
-        th, td {
-            border: 1px solid #dddddd;
-            text-align: left;
-            padding: 8px;
+        .product-info {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
-        th {
-            background-color: #f2f2f2;
+        .product-info h3 {
+            margin-bottom: 10px;
+            font-size: 22px;
+            color: #ff6600;
         }
+        .product-info p {
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .product-actions {
+            display: flex;
+            justify-content: space-between;
+        }
+        .product-actions button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .add-to-cart {
+            background-color: #28a745;
+            color: white;
+        }
+        .add-to-cart:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        .buy-now {
+            background-color: #007bff;
+            color: white;
+        }
+        .buy-now:hover {
+            background-color: #0069d9;
+            transform: scale(1.05);
+        }
+        /* Footer Styles */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            animation: fadeInUp 1s;
+        }
+        /* Modal Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; 
+            z-index: 2000; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.5); 
+            animation: fadeIn 0.5s;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 100px auto; 
+            padding: 30px;
+            border: 1px solid #888;
+            width: 90%; 
+            max-width: 400px;
+            border-radius: 10px;
+            position: relative;
+            animation: slideIn 0.5s;
+        }
+        .close {
+            color: #aaa;
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+        }
+        .modal-content h2 {
+            margin-bottom: 20px;
+            text-align: center;
+            color: #ff6600;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 12px 20px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .modal-content button {
+            width: 100%;
+            padding: 12px 20px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        .modal-content button:hover {
+            background-color: #e65c00;
+        }
+        /* Pincode Section */
+        .pincode-section {
+            background-color: #fff3e0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            animation: fadeInUp 1s;
+        }
+        .pincode-section input {
+            padding: 10px;
+            width: 200px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 16px;
+        }
+        .pincode-section button {
+            padding: 10px 20px;
+            background-color: #ff6600;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .pincode-section button:hover {
+            background-color: #e65c00;
+            transform: scale(1.05);
+        }
+        .delivery-status {
+            margin-top: 15px;
+            font-size: 18px;
+            color: #28a745;
+        }
+        .delivery-status.unavailable {
+            color: #dc3545;
+        }
+        /* Cart Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            right: 0;
+            top: 0;
+            width: 300px;
+            height: 100%;
+            background-color: #fff;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+            padding: 20px;
+            transform: translateX(100%);
+            transition: transform 0.3s;
+            z-index: 1500;
+        }
+        .cart-sidebar.open {
+            transform: translateX(0);
+        }
+        .cart-sidebar h2 {
+            margin-bottom: 20px;
+            color: #ff6600;
+        }
+        .cart-items {
+            max-height: 60vh;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+        .cart-item span {
+            font-size: 16px;
+        }
+        .close-cart {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+            color: #aaa;
+            transition: color 0.3s;
+        }
+        .close-cart:hover {
+            color: #333;
+        }
+        .checkout-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .checkout-btn:hover {
+            background-color: #218838;
+            transform: scale(1.05);
+        }
+        /* Responsive Styles */
+        @media (max-width: 768px) {
+            .product-card img {
+                height: 180px;
+            }
+            .pincode-section input {
+                width: 150px;
+            }
+        }
+        @media (max-width: 480px) {
+            nav a {
+                padding: 10px 15px;
+                font-size: 14px;
+            }
+            .section-title {
+                font-size: 24px;
+            }
+            .product-info h3 {
+                font-size: 18px;
+            }
+            .product-info p {
+                font-size: 16px;
+            }
+        }
+        /* Keyframes for Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeIn {
+            from {opacity: 0;}
+            to {opacity: 1;}
+        }
+        @keyframes slideIn {
+            from {transform: translateY(-50px);}
+            to {transform: translateY(0);}
+        }
+        button {
+    padding: 10px 15px;
+    background-color: #4285F4; /* Google Blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #357AE8; /* Darker shade on hover */
+}
+
     </style>
 </head>
 <body>
-    <h2>Enter Lecture Data JSON:</h2>
-    <textarea id="lectureDataInput" rows="10" cols="50">Paste JSON data here</textarea><br><br>
-    <button onclick="generateLectureData()">Generate Lecture Data</button>
 
-    <h2>Output Lecture Data:</h2>
-    <table id="outputTable">
-        <thead>
-            <tr>
-                <th>Lecture Number</th>
-                <th>Lecture Name</th>
-                <th>Lecture Code</th>
-                <th>Class Notes Code</th>
-                <th>DPPs PDF Code</th>
-                <th>DPPs Solution Code</th>
-            </tr>
-        </thead>
-        <tbody id="outputBody">
-            <!-- Output will be displayed here -->
-        </tbody>
-    </table>
+    <!-- Header -->
+    <header class="animate__animated animate__fadeInDown">
+        Welcome to Al Safa Mart
+    </header>
 
-    <script src="lectureDataGenerator.js"></script>
+    <!-- Navigation -->
+    <nav class="animate__animated animate__fadeInDown">
+        <a href="#" id="home-link">Home</a>
+        <a href="#" id="account-link">My Account</a>
+        <a href="#" id="cart-link"><i class="fas fa-shopping-cart"></i> Cart</a>
+        <a href="#" id="support-link">Customer Support</a>
+        <a href="#" id="orders-link">My Orders</a>
+    </nav>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Vegetables Section -->
+        <h2 class="section-title">Fresh Vegetables</h2>
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card animate__animated animate__fadeInUp">
+                <img src="https://images.unsplash.com/photo-1582515073490-df12c1d8e1b8?auto=format&fit=crop&w=800&q=80" alt="Tomatoes">
+                <div class="product-info">
+                    <h3>Tomatoes</h3>
+                    <p>Price: $2/kg</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCart('Tomatoes', 2)">Add to Cart</button>
+                        <button class="buy-now" onclick="buyNow('Tomatoes', 2)">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Product 2 -->
+            <div class="product-card animate__animated animate__fadeInUp" data-aos="fade-up">
+                <img src="https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?auto=format&fit=crop&w=800&q=80" alt="Potatoes">
+                <div class="product-info">
+                    <h3>Potatoes</h3>
+                    <p>Price: $1.5/kg</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCart('Potatoes', 1.5)">Add to Cart</button>
+                        <button class="buy-now" onclick="buyNow('Potatoes', 1.5)">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Product 3 -->
+            <div class="product-card animate__animated animate__fadeInUp">
+                <img src="https://images.unsplash.com/photo-1582515073490-df12c1d8e1b8?auto=format&fit=crop&w=800&q=80" alt="Carrots">
+                <div class="product-info">
+                    <h3>Carrots</h3>
+                    <p>Price: $3/kg</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCart('Carrots', 3)">Add to Cart</button>
+                        <button class="buy-now" onclick="buyNow('Carrots', 3)">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more vegetable products as needed -->
+        </div>
+
+        <!-- Cereals Section -->
+        <h2 class="section-title">Cereals</h2>
+        <div class="product-grid">
+            <!-- Product 1 -->
+            <div class="product-card animate__animated animate__fadeInUp">
+                <img src="https://images.unsplash.com/photo-1583511655709-6b03a823fc44?auto=format&fit=crop&w=800&q=80" alt="Rice">
+                <div class="product-info">
+                    <h3>Rice</h3>
+                    <p>Price: $1.2/kg</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCart('Rice', 1.2)">Add to Cart</button>
+                        <button class="buy-now" onclick="buyNow('Rice', 1.2)">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Product 2 -->
+            <div class="product-card animate__animated animate__fadeInUp">
+                <img src="https://images.unsplash.com/photo-1583511655709-6b03a823fc44?auto=format&fit=crop&w=800&q=80" alt="Wheat">
+                <div class="product-info">
+                    <h3>Wheat</h3>
+                    <p>Price: $0.8/kg</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCart('Wheat', 0.8)">Add to Cart</button>
+                        <button class="buy-now" onclick="buyNow('Wheat', 0.8)">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Product 3 -->
+            <div class="product-card animate__animated animate__fadeInUp">
+                <img src="https://images.unsplash.com/photo-1583511655709-6b03a823fc44?auto=format&fit=crop&w=800&q=80" alt="Corn">
+                <div class="product-info">
+                    <h3>Corn</h3>
+                    <p>Price: $2.5/kg</p>
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCart('Corn', 2.5)">Add to Cart</button>
+                        <button class="buy-now" onclick="buyNow('Corn', 2.5)">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Add more cereal products as needed -->
+        </div>
+
+        <!-- Pincode Verification Section -->
+        <div class="pincode-section animate__animated animate__fadeInUp">
+            <h2>Check Delivery Availability</h2>
+            <input type="text" id="user-pincode" placeholder="Enter your pincode">
+            <button onclick="verifyPincode()">Check Pincode</button>
+            <p id="pincode-status" class="delivery-status"></p>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="animate__animated animate__fadeInUp">
+        &copy; 2024 Al Safa Mart. All Rights Reserved.
+    </footer>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cart-sidebar">
+        <span class="close-cart" onclick="toggleCart()">&times;</span>
+        <h2>Your Cart</h2>
+        <div class="cart-items" id="cart-items">
+            <!-- Cart items will be dynamically added here -->
+        </div>
+        <button class="checkout-btn" onclick="checkout()">Checkout</button>
+    </div>
+
+    <!-- Sign Up / Sign In Modal -->
+  <div id="auth-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeAuthModal()">&times;</span>
+        <h2>Welcome to Al Safa Mart</h2>
+        <p>Please sign in or create an account</p>
+        <input type="email" id="auth-email" placeholder="Email" required>
+        <input type="password" id="auth-password" placeholder="Password" required>
+        
+        <div class="button-container">
+            <button class="btn" onclick="signIn()">Sign In</button>
+            <p style="text-align: center; margin: 10px 0;">OR</p>
+            <button class="btn" onclick="signUp()">Sign Up</button><br><br>
+            <button class="btn google-btn" onclick="googleSignIn()">Sign In with Google</button>
+        </div>
+    </div>
+</div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+    // Firebase Configuration
+    const firebaseConfig = {
+        apiKey: "AIzaSyAXUK-87HTF6QaAJCCiSdbDZNwjmAirrB4",
+        authDomain: "alsafa-251f7.firebaseapp.com",
+        projectId: "alsafa-251f7",
+        storageBucket: "alsafa-251f7.appspot.com",
+        messagingSenderId: "763026500088",
+        appId: "1:763026500088:web:1d03e7bb13047352534e0d",
+        measurementId: "G-BYEQ6YKQ5D"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Show Auth Modal on Page Load
+    window.onload = function() {
+        document.getElementById('auth-modal').style.display = 'block';
+    };
+
+    // Close Auth Modal
+    function closeAuthModal() {
+        document.getElementById('auth-modal').style.display = 'none';
+    }
+
+    // Sign Up Function
+    function signUp() {
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+        auth.createUserWithEmailAndPassword(email, password)
+            .then(userCredential => {
+                alert('Sign Up Successful!');
+                closeAuthModal();
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+    }
+
+    // Sign In Function
+    function signIn() {
+        const email = document.getElementById('auth-email').value;
+        const password = document.getElementById('auth-password').value;
+        auth.signInWithEmailAndPassword(email, password)
+            .then(userCredential => {
+                alert('Sign In Successful!');
+                closeAuthModal();
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+    }
+
+    // Google Sign-In Function
+    function googleSignIn() {
+        const provider = new firebase.auth.GoogleAuthProvider();
+        auth.signInWithPopup(provider)
+            .then(result => {
+                // This gives you a Google Access Token
+                const credential = result.credential;
+                const token = credential.accessToken;
+                const user = result.user;
+                alert('Google Sign In Successful! Welcome ' + user.displayName);
+                closeAuthModal();
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+    }
+
+
+
+        // Cart Functionality
+        let cart = [];
+
+        function addToCart(productName, price) {
+            const existingProduct = cart.find(item => item.name === productName);
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            } else {
+                cart.push({ name: productName, price: price, quantity: 1 });
+            }
+            updateCartUI();
+            alert(`${productName} added to cart!`);
+        }
+
+        function buyNow(productName, price) {
+            cart = [{ name: productName, price: price, quantity: 1 }];
+            updateCartUI();
+            toggleCart();
+            alert(`Proceeding to buy ${productName}!`);
+        }
+
+        function updateCartUI() {
+            const cartItemsDiv = document.getElementById('cart-items');
+            cartItemsDiv.innerHTML = '';
+            cart.forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'cart-item';
+                itemDiv.innerHTML = `<span>${item.name} x${item.quantity}</span><span>$${(item.price * item.quantity).toFixed(2)}</span>`;
+                cartItemsDiv.appendChild(itemDiv);
+            });
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('open');
+        }
+
+        // Checkout Function
+        function checkout() {
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            toggleCart();
+            alert('Proceeding to checkout!');
+            // Here you can redirect to a payment gateway or another page
+        }
+
+        // Pincode Verification
+        function verifyPincode() {
+            const pincode = document.getElementById('user-pincode').value;
+            const status = document.getElementById('pincode-status');
+            const validPincode = "415709";
+            if (pincode === validPincode) {
+                status.textContent = "Delivery is available to your pincode!";
+                status.classList.remove('unavailable');
+                status.classList.add('available');
+            } else {
+                status.textContent = "Sorry, delivery is not available to your pincode.";
+                status.classList.remove('available');
+                status.classList.add('unavailable');
+            }
+        }
+
+        // Navigation Links Functionality
+        document.getElementById('cart-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            toggleCart();
+        });
+
+        // Close Modal when clicking outside the content
+        window.onclick = function(event) {
+            const modal = document.getElementById('auth-modal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        };
+    </script>
 </body>
 </html>
